@@ -34,7 +34,7 @@ void AMyCharacter::MoveRight(float AxisValue)
 void AMyCharacter::Hit()
 {
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hitting a target."));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("Hitting a target."));
 	//UE_LOG(LogTemp, Log, TEXT("Hitting a target"));
 }
 
