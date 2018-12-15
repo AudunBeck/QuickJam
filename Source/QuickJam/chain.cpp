@@ -60,13 +60,14 @@ void Achain::Tick(float DeltaTime)
 	p1Distance = sqrtf(powf((player1Loc.X - tempLocation.X), 2) + powf((player1Loc.Y - tempLocation.Y), 2));
 	p2Distance = sqrtf(powf((player2Loc.X - tempLocation.X), 2) + powf((player2Loc.Y - tempLocation.Y), 2));
 
-	if (p1Distance > maxDistance)
+	if (p1Distance > maxDistance && players[0])
 	{
 		FVector ballDirection = tempLocation - player1Loc;
 		players[0]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
 	}
 
-	if (p2Distance > maxDistance)
+	// Game can's find player[1]
+	if (p2Distance > maxDistance && players[1])
 	{
 		FVector ballDirection = tempLocation - player2Loc;
 		players[1]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
