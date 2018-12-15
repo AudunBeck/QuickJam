@@ -4,6 +4,8 @@
 #include "Engine/GameEngine.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/BoxComponent.h"
+#include "Enemy.h"
 
 
 // Sets default values
@@ -11,6 +13,11 @@ AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	BoxComponent->SetGenerateOverlapEvents(true);
+	BoxComponent->SetCollisionProfileName(TEXT("Trigger"));
+	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::OnBoxBeginOverlap);
+	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &AMyCharacter::OnBoxEndOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -34,7 +41,8 @@ void AMyCharacter::MoveRight(float AxisValue)
 void AMyCharacter::Hit()
 {
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hitting a target."));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Trying to hit a target."));
+	//BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	//UE_LOG(LogTemp, Log, TEXT("Hitting a target"));
 }
 
@@ -43,8 +51,10 @@ void AMyCharacter::Hit()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 }
+
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -55,5 +65,17 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	InputComponent->BindAction("Hit", IE_Pressed, this, &AMyCharacter::Hit);
 
+}
+
+void AMyCharacter::OnBoxBeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (OtherActor && (OtherActor != this) && OtherComponent)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+	}
+}
+
+void AMyCharacter::OnBoxEndOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
+{
 }
 
