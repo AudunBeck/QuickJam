@@ -54,19 +54,22 @@ void Achain::Tick(float DeltaTime)
 		player2Loc = { 0.f, 0.f, 0.f };
 	}
 
+	tempLocation = FVector((player1Loc.X + player2Loc.X) / 2, (player1Loc.Y + player2Loc.Y) / 2, GetActorLocation().Z);
+	SetActorLocation(tempLocation);
+
 	p1Distance = sqrtf(powf((player1Loc.X - tempLocation.X), 2) + powf((player1Loc.Y - tempLocation.Y), 2));
 	p2Distance = sqrtf(powf((player2Loc.X - tempLocation.X), 2) + powf((player2Loc.Y - tempLocation.Y), 2));
 
-	//if (p1Distance > maxDistance)
-	//{
-	//	FVector ballDirection = tempLocation - player1Loc;
-	//	players[0]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
-	//}
+	if (p1Distance > maxDistance)
+	{
+		FVector ballDirection = tempLocation - player1Loc;
+		players[0]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
+	}
 
-	//if (p2Distance > maxDistance)
-	//{
-	//	FVector ballDirection = tempLocation - player2Loc;
-	//	players[1]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
-	//}
+	if (p2Distance > maxDistance)
+	{
+		FVector ballDirection = tempLocation - player2Loc;
+		players[1]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
+	}
 }
 
