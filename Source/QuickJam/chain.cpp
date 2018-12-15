@@ -32,23 +32,41 @@ void Achain::Tick(float DeltaTime)
 		players.Add(UGameplayStatics::GetPlayerController(GetWorld(), 1));
 		done = true;
 	}
-
- 	player1Loc = players[0]->GetCharacter()->GetActorLocation();
-	player2Loc = players[0]->GetCharacter()->GetActorLocation();
+	if (players[0])
+	{
+		if (GEngine)
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("PlayerOneFound"));
+		player1Loc = players[0]->GetCharacter()->GetActorLocation();
+	}
+	else
+	{
+		player1Loc = { 0.f, 0.f, 0.f };
+	}
+		
+	if(players[1])
+	{
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("PlayerTwoFound"));
+		player2Loc = players[1]->GetCharacter()->GetActorLocation();
+	}
+	else
+	{
+		player2Loc = { 0.f, 0.f, 0.f };
+	}
 
 	p1Distance = sqrtf(powf((player1Loc.X - tempLocation.X), 2) + powf((player1Loc.Y - tempLocation.Y), 2));
 	p2Distance = sqrtf(powf((player2Loc.X - tempLocation.X), 2) + powf((player2Loc.Y - tempLocation.Y), 2));
 
-	if (p1Distance > maxDistance)
-	{
-		FVector ballDirection = tempLocation - player1Loc;
-		players[0]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
-	}
+	//if (p1Distance > maxDistance)
+	//{
+	//	FVector ballDirection = tempLocation - player1Loc;
+	//	players[0]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
+	//}
 
-	if (p2Distance > maxDistance)
-	{
-		FVector ballDirection = tempLocation - player2Loc;
-		players[1]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
-	}
+	//if (p2Distance > maxDistance)
+	//{
+	//	FVector ballDirection = tempLocation - player2Loc;
+	//	players[1]->GetCharacter()->AddMovementInput(ballDirection, dragForce);
+	//}
 }
 
